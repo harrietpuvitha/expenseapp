@@ -57,6 +57,8 @@ import 'package:flutter/material.dart';
  const color_gradient_box21 = const Color(0xff36d4e7);
  const color_gradient_box22 = const Color(0xff40aaf8);
 
+ const color_gradient_b = const Color(0xff40aaf8);
+
  const color_gradient_box31 = const Color(0xff44e298);
  const color_gradient_box32 = const Color(0xff3cb9b3);
 

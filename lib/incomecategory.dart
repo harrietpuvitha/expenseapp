@@ -14,13 +14,22 @@ class IncomeCategory extends StatefulWidget {
 
 }
 
-List<String>title=[
-   "Gift",
+ValueNotifier<List<String>> titleList = ValueNotifier<List<String>>([
+  "Gift",
   "Check",
   "Interest",
   "Salary",
   "Other",
-];
+]);
+
+
+// List<String>title=[
+//    "Gift",
+//   "Check",
+//   "Interest",
+//   "Salary",
+//   "Other",
+// ];
 List<IconData>icon=[Icons.card_giftcard_outlined,Icons.money_outlined ,Icons.account_balance_outlined,
   Icons.currency_rupee,Icons.miscellaneous_services,
   ];
@@ -35,6 +44,17 @@ String input ="";
 TextEditingController ctrTitle= TextEditingController();
 
 
+void addData(){
+
+    //title.add(ctrTitle.text.toString());
+    icon.add(Icons.confirmation_number_sharp);
+    colors.add(Colors.redAccent);
+
+    titleList.value.add(ctrTitle.text.toString());
+    titleList.notifyListeners();
+    ctrTitle.clear();
+
+}
 
 class _IncomeCategoryState extends State<IncomeCategory> {
   @override
@@ -57,13 +77,11 @@ class _IncomeCategoryState extends State<IncomeCategory> {
           ),
           actions:[
             TextButton(onPressed: (){
-              setState(() {
-                title.add(ctrTitle.text.toString());
-                icon.add(Icons.confirmation_number_sharp);
-                colors.add(Colors.redAccent);
 
-                Navigator.pop(context);
-              });
+              addData();
+              Navigator.pop(context);
+              setState(() {});
+
             }, child: Text("Add"))
 
           ],
@@ -74,45 +92,97 @@ class _IncomeCategoryState extends State<IncomeCategory> {
     child: Icon(Icons.add),
 
     ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio:1,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0),
-          itemCount: icon.length,
-          itemBuilder: (BuildContext context, int Index) {
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon[Index],
-                    color: colors[Index],
-                    size: 40,
-                    shadows: [Shadow(
-                        blurRadius: 20,
-                        offset: Offset(3, 6),
-                        color: colors[Index]
-                    )],
-                  ),
-                  SizedBox(height: 8,),
-                  Center(
-                    child: Text(
-                      title[Index].toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+      // body: GridView.builder(
+      //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      //       crossAxisCount: 4,
+      //       childAspectRatio:1,
+      //       crossAxisSpacing: 0,
+      //       mainAxisSpacing: 0),
+      //     itemCount: icon.length,
+      //     itemBuilder: (BuildContext context, int Index) {
+      //       return Container(
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             Icon(icon[Index],
+      //               color: colors[Index],
+      //               size: 40,
+      //               shadows: [Shadow(
+      //                   blurRadius: 20,
+      //                   offset: Offset(3, 6),
+      //                   color: colors[Index]
+      //               )],
+      //             ),
+      //             SizedBox(height: 8,),
+      //             Center(
+      //               child: Text(
+      //                 title[Index].toString(),
+      //                 style: const TextStyle(
+      //                   fontSize: 15,
+      //                   color: Colors.black,
+      //                 ),
+      //                 textAlign: TextAlign.center,
+      //               ),
+      //             ),
+      //
+      //
+      //           ],
+      //         ),
+      //       );
+      //
+      //     },
+      // ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: titleList,
+              builder: (context,value,child){
+                return  GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio:1,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0),
+                    itemCount: icon.length,
+                    itemBuilder: (BuildContext context, int Index) {
+                      return Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(icon[Index],
+                              color: colors[Index],
+                              size: 40,
+                              shadows: [Shadow(
+                                  blurRadius: 20,
+                                  offset: Offset(3, 6),
+                                  color: colors[Index]
+                              )],
+                            ),
+                            SizedBox(height: 8,),
+                            Center(
+                              child: Text(
+                                value[Index].toString(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
 
 
-                ],
-              ),
-            );
+                          ],
+                        ),
+                      );
 
-          },
+                    },
+                );
+              },
+
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFEFEFEF)),
 
 
-      home:Category(),
+      home:Home(),
     );
   }
 }

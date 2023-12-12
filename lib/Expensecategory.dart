@@ -9,7 +9,7 @@ class ExpenseCategory extends StatefulWidget {
   State<ExpenseCategory> createState() => _ExpenseCategoryState();
 }
 TextEditingController ctrTitle= TextEditingController();
-List<String>title=[
+ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
   "Transport",
   "Sports",
   "Gift",
@@ -19,7 +19,18 @@ List<String>title=[
   "Family",
   "Hospital",
   "Other",
-];
+]);
+// List<String>title=[
+//   "Transport",
+//   "Sports",
+//   "Gift",
+//   "Food And Drinks'",
+//   "Entertainment",
+//   "Education",
+//   "Family",
+//   "Hospital",
+//   "Other",
+// ];
 List<IconData>icon=[Icons.directions_train_outlined,Icons.sports_soccer,Icons.card_giftcard,Icons.local_pizza,Icons.movie,Icons.school,
   Icons.family_restroom_rounded,
   Icons.local_hospital,
@@ -48,6 +59,7 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
             return AlertDialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
 
+
               title: Text('Add Items') ,
               content: TextField(
                 controller: ctrTitle,
@@ -58,13 +70,13 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
               ),
               actions:[
                 TextButton(onPressed: (){
-                  setState(() {
-                    title.add(ctrTitle.text.toString());
+                    title.value.add(ctrTitle.text.toString());
                     icon.add(Icons.confirmation_number_sharp);
                     colors.add(Colors.redAccent);
-
+                    title.notifyListeners();
                     Navigator.pop(context);
-                  });
+                    ctrTitle.clear();
+
                 }, child: Text("Add"))
 
               ],
@@ -72,45 +84,59 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
           } );
 
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,
+          color: Colors.white,
+        ),
 
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio:1,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0),
-        itemCount: icon.length,
-        itemBuilder: (BuildContext context, int Index) {
-          return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon[Index],
-                  color: colors[Index],
-                  size: 40,
-                  shadows: [Shadow(
-                      blurRadius: 20,
-                      offset: Offset(3, 6),
-                      color: colors[Index]
-                  )],
-                ),
-                SizedBox(height: 8,),
-                Center(
-                  child: Text(
-                    title[Index].toString(),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: title,
+                builder: (context,value,child) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 0),
+              itemCount: icon.length,
+              itemBuilder: (BuildContext context, int Index) {
+                return Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(icon[Index],
+                        color: colors[Index],
+                        size: 40,
+                        shadows: [Shadow(
+                            blurRadius: 20,
+                            offset: Offset(3, 6),
+                            color: colors[Index]
+                        )
+                        ],
+                      ),
+                      SizedBox(height: 8,),
+                      Center(
+                        child: Text(
+                          value[Index].toString(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
+            );
+                }
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

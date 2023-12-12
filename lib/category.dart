@@ -24,12 +24,26 @@ class _CategoryState extends State<Category> {
           backgroundColor: color_p9,
           bottom: const TabBar(
               tabs: [
-                Tab(text: "Income"),
-                Tab(text: "Expense"),
+                Tab(child: Text("Income",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20
+                  ),
+                ),
+                ),
+
+                Tab(child: Text("Expense",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20
+                  ),
+                ),
+                ),
               ],
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_outlined),
+            color: Colors.white,
             onPressed: (){
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Setting()));

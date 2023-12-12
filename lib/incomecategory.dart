@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:expense_tracker/Icons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'color.dart';
 
@@ -12,15 +13,23 @@ class IncomeCategory extends StatefulWidget {
   @override
   State<IncomeCategory> createState() => _IncomeCategoryState();
 
-}
 
-List<String>title=[
-   "Gift",
+}
+ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
+  "Gift",
   "Check",
   "Interest",
   "Salary",
   "Other",
-];
+]);
+
+// List<String>title=[
+//    "Gift",
+//   "Check",
+//   "Interest",
+//   "Salary",
+//   "Other",
+// ];
 List<IconData>icon=[Icons.card_giftcard_outlined,Icons.money_outlined ,Icons.account_balance_outlined,
   Icons.currency_rupee,Icons.miscellaneous_services,
   ];
@@ -57,62 +66,76 @@ class _IncomeCategoryState extends State<IncomeCategory> {
           ),
           actions:[
             TextButton(onPressed: (){
-              setState(() {
-                title.add(ctrTitle.text.toString());
+
+                title.value.add(ctrTitle.text.toString());
                 icon.add(Icons.confirmation_number_sharp);
                 colors.add(Colors.redAccent);
-
+                title.notifyListeners();
                 Navigator.pop(context);
-              });
-            }, child: Text("Add"))
+                ctrTitle.clear();
 
+            }, child: Text("Add"))
           ],
         );
-      } );
-
+      }
+      );
     },
-    child: Icon(Icons.add),
+    child: Icon(Icons.add,
+      color: Colors.white,
 
     ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio:1,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0),
-          itemCount: icon.length,
-          itemBuilder: (BuildContext context, int Index) {
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon[Index],
-                    color: colors[Index],
-                    size: 40,
-                    shadows: [Shadow(
-                        blurRadius: 20,
-                        offset: Offset(3, 6),
-                        color: colors[Index]
-                    )],
-                  ),
-                  SizedBox(height: 8,),
-                  Center(
-                    child: Text(
-                      title[Index].toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+
+    ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: title,
+                builder: (context,value,child) {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 0),
+                    itemCount: icon.length,
+                    itemBuilder: (BuildContext context, int Index) {
+                      return Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(icon[Index],
+                              color: colors[Index],
+                              size: 40,
+                              shadows: [Shadow(
+                                  blurRadius: 20,
+                                  offset: Offset(3, 6),
+                                  color: colors[Index]
+                              )
+                              ],
+                            ),
+                            SizedBox(height: 8,),
+                            Center(
+                              child: Text(
+                                value[Index].toString(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black ,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
 
 
-                ],
-              ),
-            );
-
-          },
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+            ),
+          ),
+        ],
       ),
     );
   }

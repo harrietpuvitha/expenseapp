@@ -9,7 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+import 'Expensecategory.dart';
 import 'color.dart';
+
+ValueNotifier<List<Expense>>expenseList=ValueNotifier([]);
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
@@ -19,11 +22,15 @@ class ExpenseForm extends StatefulWidget {
 }
 
 class _ExpenseForm extends State<ExpenseForm> {
-  List<Expense>details=[];
+  //List<Expense>details=[];
   TextEditingController date= TextEditingController();
   TextEditingController expense= TextEditingController();
   TextEditingController amount= TextEditingController();
   TextEditingController category= TextEditingController();
+  //ValueNotifier<List<String>> expensecategoryList = ValueNotifier(expenseList.value);
+  ValueNotifier<List<IconData>> expenseiconsList = ValueNotifier(expenseicon.value);
+  ValueNotifier<List<Color>> expensecolorsList = ValueNotifier(expensecolors.value);
+
 
   String initialValue ='Other';
 
@@ -40,7 +47,10 @@ class _ExpenseForm extends State<ExpenseForm> {
     return Scaffold(
       floatingActionButton: keyboardIsOpened?null:
       FloatingActionButton(
-        child: Text('Back'),
+        child: Text('Back',
+        style: TextStyle(
+          color: Colors.white
+        ),),
         backgroundColor: color_p9,
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> BottomNavigation()));
@@ -188,83 +198,111 @@ class _ExpenseForm extends State<ExpenseForm> {
                 ),
               ),
               SizedBox(height: 20,),
-              DropdownButtonFormField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: color_gray10,
+              ValueListenableBuilder(
+                valueListenable: expenseCategoryList,
+                builder: (context,value,child) {
+                  return DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color_gray10,
 
-                  hintStyle: TextStyle(
-                    color: primaryColor2,
-                  ),
-                  focusedBorder:OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        color: color_gray10,
-                      )
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      hintStyle: TextStyle(
+                        color: primaryColor2,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: color_gray10,
+                          )
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
 
-                      borderSide: BorderSide(
-                          color: color_gray10
-                      )
+                          borderSide: BorderSide(
+                              color: color_gray10
+                          )
 
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
 
-                      borderSide: BorderSide(
-                          color: color_gray10
-                      )
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: color_gray10
+                          )
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
 
-                      borderSide: BorderSide(
+                          borderSide: BorderSide(
 
-                          color: color_gray10
-                      )
-                  ),
-                ),
-                validator: (value) {
-                  if(value!.isEmpty){
-                    return "please select Category";
-                  }
-                  else{
-                    return null;
-                  }
-
-                },
-
-                items: icons.keys
-
-                    .map(
-                      (e) => DropdownMenuItem(
-                    value: e,
-                    child: Row(
-                      children: [
-                        Icon(icons[e],
-                          color: colors[e],
-
-                        ),
-                        SizedBox(width: 15,),
-                        Text(e),
-                      ],
-
+                              color: color_gray10
+                          )
+                      ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "please select Category";
+                      }
+                      else {
+                        return null;
+                      }
+                    },
 
-                  ),
-                )
+                    // items: icons.keys
+                    //
+                    //     .map(
+                    //       (e) =>
+                    //       DropdownMenuItem(
+                    //         value: e,
+                    //         child: Row(
+                    //           children: [
+                    //             Icon(icons[e],
+                    //               color: colors[e],
+                    //
+                    //             ),
+                    //             SizedBox(width: 15,),
+                    //             Text(e),
+                    //           ],
+                    //
+                    //         ),
+                    //
+                    //       ),
+                    // )
+                    //
+                    //     .toList(),
+                    // value: initialValue,
+                    // onChanged: (newValue) {
+                    //   setState(() {
+                    //     initialValue = newValue!;
+                    //   });
+                    // },
+                    value: initialValue,
+                    items: expenseCategoryList.value.map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Row(
+                          children: [
+                            Text(e.toString()),
+                          ],
+                        ),
+                      );
+                    })
+                        .toList(),
 
-                    .toList(),
-                value: initialValue,
-                onChanged: (newValue) {
-                  setState(() {
-                    initialValue = newValue!;
-                  });
+                    onChanged: (newValue) {
+                      // expenseCategoryList.value.add(expenseCategoryList.value.toString());
+                      // expenseiconsList.value.add(Icons.confirmation_number_sharp);
+                      // expensecolorsList.value.add(Colors.redAccent);
+                      // expenseCategoryList.notifyListeners();
+                      initialValue=newValue! ;
 
-                },
+                      //initialValue = newValue!;
+                    },
 
+
+                  );
+
+                }
               ),
 
 
@@ -351,13 +389,19 @@ class _ExpenseForm extends State<ExpenseForm> {
               ElevatedButton(onPressed: (){
 
                 if(formKey.currentState!.validate()){
-                  details.add(Expense(title: expense.text,amount: int.parse(amount.text),category: initialValue.toString(),date: date.text));
+                  expenseList.value.add(Expense(title: expense.text,amount: int.parse(amount.text),category: initialValue.toString(),date: date.text));
 
-                  setState(()  {
-
+                  formKey.currentState?.reset();
+                  amount.clear();
+                  expense.clear();
+                  category.clear();
+                  initialValue ='Other';
+                  date.clear();
+                  setState(() {
 
                   });
-                  print(details.toString());
+
+                  print(expense.value.toString());
                   // print("Expense :" +expense.text);
                   // print("Amount :" +amount.text);
                   // print("Category:" +initialValue);
@@ -413,17 +457,17 @@ class _ExpenseForm extends State<ExpenseForm> {
                 ),
 
               ),
-           ListView.builder(
-                shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-
-              itemCount: details.length,
-              itemBuilder: (BuildContext context, int Index) {
-              return Text(details[Index].title.toString() + "\n" + details[Index].amount.toString() + "\n" +
-              details[Index].category.toString()+ "\n" + details[Index].date.toString());
-              
-          },
-        ),
+        //    ListView.builder(
+        //         shrinkWrap: true,
+        //       physics: NeverScrollableScrollPhysics(),
+        //
+        //       itemCount: details.length,
+        //       itemBuilder: (BuildContext context, int Index) {
+        //       return Text(details[Index].title.toString() + "\n" + details[Index].amount.toString() + "\n" +
+        //       details[Index].category.toString()+ "\n" + details[Index].date.toString());
+        //
+        //   },
+        // ),
 
 
 

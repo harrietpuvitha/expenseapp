@@ -4,7 +4,30 @@ import 'package:expense_tracker/Icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'color.dart';
+ValueNotifier<List<String>> incomeCategoryList = ValueNotifier<List<String>>([
+  "Gift",
+  "Check",
+  "Interest",
+  "Salary",
+   "Other",
 
+]);
+
+ValueNotifier<List<IconData>> iconList = ValueNotifier<List<IconData>>([
+
+  Icons.card_giftcard_outlined,
+  Icons.money_outlined ,
+  Icons.account_balance_outlined,
+  Icons.currency_rupee,
+   Icons.miscellaneous_services,
+]);
+ValueNotifier<List<Color>>colorList=ValueNotifier<List<Color>>([
+  color_gradient_box12,
+  Colors.green,
+  color_gradient_box62,
+  Colors.deepOrange,
+   Colors.indigo,
+]);
 
 class IncomeCategory extends StatefulWidget {
   const IncomeCategory({Key? key}) : super(key: key);
@@ -15,13 +38,7 @@ class IncomeCategory extends StatefulWidget {
 
 
 }
-ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
-  "Gift",
-  "Check",
-  "Interest",
-  "Salary",
-  "Other",
-]);
+
 
 // List<String>title=[
 //    "Gift",
@@ -30,16 +47,7 @@ ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
 //   "Salary",
 //   "Other",
 // ];
-List<IconData>icon=[Icons.card_giftcard_outlined,Icons.money_outlined ,Icons.account_balance_outlined,
-  Icons.currency_rupee,Icons.miscellaneous_services,
-  ];
-List<Color>colors=[
-  color_gradient_box12,
-  Colors.green,
-  color_gradient_box62,
-  Colors.deepOrange,
-  Colors.indigo,
-];
+
 String input ="";
 TextEditingController ctrTitle= TextEditingController();
 
@@ -62,17 +70,19 @@ class _IncomeCategoryState extends State<IncomeCategory> {
             onChanged: (String value){
               input = value;
 
+
             },
           ),
           actions:[
             TextButton(onPressed: (){
 
-                title.value.add(ctrTitle.text.toString());
-                icon.add(Icons.confirmation_number_sharp);
-                colors.add(Colors.redAccent);
-                title.notifyListeners();
+              incomeCategoryList.value.add(ctrTitle.text.toString());
+                iconList.value.add(Icons.confirmation_number_sharp);
+                colorList.value.add(Colors.redAccent);
+              incomeCategoryList.notifyListeners();
                 Navigator.pop(context);
                 ctrTitle.clear();
+
 
             }, child: Text("Add"))
           ],
@@ -82,15 +92,13 @@ class _IncomeCategoryState extends State<IncomeCategory> {
     },
     child: Icon(Icons.add,
       color: Colors.white,
-
     ),
-
     ),
       body: Column(
         children: [
           Expanded(
             child: ValueListenableBuilder(
-              valueListenable: title,
+              valueListenable: incomeCategoryList,
                 builder: (context,value,child) {
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -98,19 +106,19 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                         childAspectRatio: 1,
                         crossAxisSpacing: 0,
                         mainAxisSpacing: 0),
-                    itemCount: icon.length,
+                    itemCount: incomeCategoryList.value.length,
                     itemBuilder: (BuildContext context, int Index) {
                       return Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(icon[Index],
-                              color: colors[Index],
+                            Icon(iconList.value[Index],
+                              color: colorList.value[Index],
                               size: 40,
                               shadows: [Shadow(
                                   blurRadius: 20,
                                   offset: Offset(3, 6),
-                                  color: colors[Index]
+                                  color: colorList.value[Index]
                               )
                               ],
                             ),

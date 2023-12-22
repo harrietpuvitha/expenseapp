@@ -28,7 +28,10 @@ class _LoginState extends State<Login> {
                 MaterialPageRoute(builder: (context) => const Welcome()));
           }
         ),
-        title: Text('Login'),
+        title: Text('Login',
+        style: TextStyle(
+          color: Colors.white
+        ),),
         backgroundColor: color_p10,
       ),
       body: SingleChildScrollView(

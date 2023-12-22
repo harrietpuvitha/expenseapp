@@ -19,4 +19,12 @@ class Income {
     required this.category,
 
   });
+
+  get length => null;
+
+  void add(Income income) {}
+
+  //void add(Income income) {}
+
+
 }

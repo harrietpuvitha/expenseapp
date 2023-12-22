@@ -78,8 +78,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ],
             );
           },
-          child:Icon(Icons.add),
+          child:Icon(Icons.add,
+          color: Colors.white,),
           backgroundColor: color_p9,
+
         ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

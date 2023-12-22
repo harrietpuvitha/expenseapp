@@ -9,7 +9,7 @@ class ExpenseCategory extends StatefulWidget {
   State<ExpenseCategory> createState() => _ExpenseCategoryState();
 }
 TextEditingController ctrTitle= TextEditingController();
-ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
+ValueNotifier<List<String>> expenseCategoryList = ValueNotifier<List<String>>([
   "Transport",
   "Sports",
   "Gift",
@@ -31,12 +31,12 @@ ValueNotifier<List<String>> title = ValueNotifier<List<String>>([
 //   "Hospital",
 //   "Other",
 // ];
-List<IconData>icon=[Icons.directions_train_outlined,Icons.sports_soccer,Icons.card_giftcard,Icons.local_pizza,Icons.movie,Icons.school,
+ValueNotifier<List<IconData>>expenseicon=ValueNotifier<List<IconData>>([Icons.directions_train_outlined,Icons.sports_soccer,Icons.card_giftcard,Icons.local_pizza,Icons.movie,Icons.school,
   Icons.family_restroom_rounded,
   Icons.local_hospital,
   Icons.miscellaneous_services,
-];
-List<Color>colors=[
+]);
+ValueNotifier<List<Color>>expensecolors=ValueNotifier<List<Color>>([
   Colors.purple,
   Colors.yellow,
   Colors.blueAccent,
@@ -46,7 +46,7 @@ List<Color>colors=[
   Colors.red,
   Colors.brown,
   Colors.indigo,
-];
+]);
 String input ="";
 class _ExpenseCategoryState extends State<ExpenseCategory> {
   @override
@@ -70,10 +70,10 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
               ),
               actions:[
                 TextButton(onPressed: (){
-                    title.value.add(ctrTitle.text.toString());
-                    icon.add(Icons.confirmation_number_sharp);
-                    colors.add(Colors.redAccent);
-                    title.notifyListeners();
+                  expenseCategoryList.value.add(ctrTitle.text.toString());
+                    expenseicon.value.add(Icons.confirmation_number_sharp);
+                    expensecolors.value.add(Colors.redAccent);
+                  expenseCategoryList.notifyListeners();
                     Navigator.pop(context);
                     ctrTitle.clear();
 
@@ -93,7 +93,7 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
         children: [
           Expanded(
             child: ValueListenableBuilder(
-              valueListenable: title,
+              valueListenable: expenseCategoryList,
                 builder: (context,value,child) {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,19 +101,19 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
                   childAspectRatio: 1,
                   crossAxisSpacing: 0,
                   mainAxisSpacing: 0),
-              itemCount: icon.length,
+              itemCount: expenseicon.value.length,
               itemBuilder: (BuildContext context, int Index) {
                 return Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(icon[Index],
-                        color: colors[Index],
+                      Icon(expenseicon.value[Index],
+                        color: expensecolors.value[Index],
                         size: 40,
                         shadows: [Shadow(
                             blurRadius: 20,
                             offset: Offset(3, 6),
-                            color: colors[Index]
+                            color: expensecolors.value[Index]
                         )
                         ],
                       ),

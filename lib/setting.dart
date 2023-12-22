@@ -23,13 +23,15 @@ class _SettingState extends State<Setting> {
         title: Text("Settings",
         style: TextStyle(
           fontSize: 20,
+          color: Colors.white
         ),),
         leading: IconButton(
           onPressed: (){
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => BottomNavigation()));
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: Icon(Icons.arrow_back_outlined,
+          color: Colors.white,),
         ),
       ),
       body: Container(
